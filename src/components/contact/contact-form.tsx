@@ -10,6 +10,7 @@ import { services } from '@/data/services';
 import { site } from '@/lib/site';
 import { buttonClass } from '@/components/shared/button';
 import { cn } from '@/lib/utils';
+import GoogleContactForm from './google-contact-form';
 
 /**
  * Web3Forms emails each submission to the address registered with the key — no
@@ -107,7 +108,7 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="rounded-xl border border-line bg-ink-2 p-6 sm:p-10">
-      {!ACCESS_KEY ? (
+      {/* {!ACCESS_KEY ? (
         <p className="mb-8 flex gap-3 rounded-lg border border-line-hover bg-accent-soft p-4 text-sm text-fg-2">
           <AlertCircle aria-hidden className="mt-0.5 size-4 shrink-0 text-glow" />
           <span>
@@ -119,12 +120,12 @@ export function ContactForm() {
             .
           </span>
         </p>
-      ) : null}
+      ) : null} */}
 
       {/* Honeypot: hidden from people and assistive tech; bots tick it. */}
       <input type="checkbox" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" {...register('botcheck')} />
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      {/* <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Full name" error={errors.name?.message}>
           {(p) => <input {...p} {...register('name')} autoComplete="name" className={inputClass} />}
         </Field>
@@ -179,7 +180,9 @@ export function ContactForm() {
             </select>
           )}
         </Field>
-      </div>
+      </div> */}
+
+      <GoogleContactForm formUrl='https://google.com' />
 
       {status.state === 'error' ? (
         <p role="alert" className="mt-8 flex gap-3 rounded-lg border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-200">
@@ -195,10 +198,10 @@ export function ContactForm() {
             Privacy
           </Link>
         </p>
-        <button type="submit" disabled={isSubmitting} className={buttonClass('primary', 'w-full sm:w-auto')}>
+        {/* <button type="submit" disabled={isSubmitting} className={buttonClass('primary', 'w-full sm:w-auto')}>
           {isSubmitting ? <Loader2 aria-hidden className="size-4 animate-spin" /> : null}
           {isSubmitting ? 'Sending…' : 'Send enquiry'}
-        </button>
+        </button> */}
       </div>
     </form>
   );
