@@ -7,6 +7,7 @@ import { ProjectVisual } from '@/components/shared/project-visual';
 import { Reveal } from '@/components/shared/reveal';
 import { ArrowLink } from '@/components/shared/button';
 import { Tag } from '@/components/shared/cards';
+import { ConfidentialityNotice } from '@/components/shared/confidentiality-notice';
 import { CtaBand } from '@/components/shared/cta-band';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -35,7 +36,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-36 sm:pt-44">
+      <section className="relative overflow-hidden pt-36 sm:pt-28">
         <div aria-hidden className="grid-lines absolute inset-0" />
         <div className="container-x relative">
           <Reveal>
@@ -44,65 +45,94 @@ export default async function ProjectPage({ params }: Props) {
             </Link>
             <div className="mt-8 flex flex-wrap gap-2">
               <Tag tone="accent">{kindLabel[project.kind]}</Tag>
-              <Tag>{project.category}</Tag>
+              <Tag>{project.sector}</Tag>
             </div>
-            <h1 className="mt-6 text-5xl sm:text-7xl lg:text-8xl">{project.title}</h1>
+            <p className="mt-6 text-sm text-fg-3">{project.category}</p>
+            <h1 className="mt-3 text-5xl sm:text-7xl lg:text-8xl">{project.title}</h1>
             <p className="mt-6 max-w-2xl text-xl text-fg-2">{project.summary}</p>
+            <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-sm">
+              <div>
+                <dt className="text-fg-3">{project.kind === 'concept' ? 'Market scenario (illustrative)' : 'Context'}</dt>
+                <dd className="mt-1 text-fg">{project.scenario}</dd>
+              </div>
+              {/* <div>
+                <dt className="text-fg-3">Status</dt>
+                <dd className="mt-1 text-fg">{project.status}</dd>
+              </div> */}
+            </dl>
           </Reveal>
           <Reveal delay={0.15}>
             <figure className="mt-16">
-              <ProjectVisual visual={project.visual} className="aspect-[16/10] shadow-card sm:aspect-[16/8]" />
+              <ProjectVisual visual={project.visual} image={project.image} alt={`${project.title} interface mockup`} className="aspect-[16/10] shadow-card sm:aspect-[16/8]" />
               <figcaption className="mt-3 text-xs text-fg-3">Illustrative interface mockup, not a screenshot of a live product.</figcaption>
             </figure>
           </Reveal>
         </div>
       </section>
 
-      <div className="container-x py-20">
-        <p className="flex max-w-3xl gap-3 rounded-lg border border-line-hover bg-accent-soft p-5 text-sm text-fg-2">
-          <Info aria-hidden className="mt-0.5 size-4 shrink-0 text-glow" />
-          {kindNote[project.kind]}
-        </p>
-
+      <div className="container-x py-4">
         <Block n="01" title="Overview">
-          <p>{project.overview}</p>
+          <div className="space-y-5">
+            {project.overview.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
         </Block>
-        <Block n="02" title="The problem">
-          <p>{project.problem}</p>
+        <Block n="02" title="The challenge">
+          <Bullets items={project.challenge.points} />
+          {project.challenge.closing ? <p className="mt-8">{project.challenge.closing}</p> : null}
         </Block>
-        <Block n="03" title="Proposed solution">
-          <p>{project.solution}</p>
+        <Block n="03" title="Objective">
+          <p className="text-fg">{project.objective}</p>
         </Block>
-        <Block n="04" title="Architecture">
+        <Block n="04" title="Engineering approach">
+          <ol className="space-y-12">
+            {project.approach.map((a, i) => (
+              <li key={a.title}>
+                <p className="font-display text-xs text-glow">0{i + 1}</p>
+                <h3 className="mt-2 text-xl text-fg">{a.title}</h3>
+                {a.body ? <p className="mt-3">{a.body}</p> : null}
+                {a.points.length ? (
+                  a.ordered ? (
+                    <ol className="mt-5 list-decimal space-y-2 pl-5 marker:text-glow">
+                      {a.points.map((pt) => (
+                        <li key={pt}>{pt}</li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <div className="mt-5">
+                      <Bullets items={a.points} />
+                    </div>
+                  )
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        </Block>
+        <Block n="05" title="Proposed architecture">
           <ol className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
-            {project.architecture.map((a, i) => (
+            {project.architecture.map((a) => (
               <li key={a.name} className="bg-ink-2 p-6">
-                <p className="font-display text-xs text-glow">Layer {i + 1}</p>
-                <p className="mt-2 text-lg text-fg">{a.name}</p>
+                <p className="text-lg text-fg">{a.name}</p>
                 <p className="mt-2 text-sm">{a.detail}</p>
               </li>
             ))}
           </ol>
         </Block>
-        <Block n="05" title="Technology stack">
+        <Block n="06" title="Technology">
           <div className="flex flex-wrap gap-2">
             {project.stack.map((t) => (
               <Tag key={t}>{t}</Tag>
             ))}
           </div>
         </Block>
-        <Block n="06" title="Key features">
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {project.features.map((f) => (
-              <li key={f} className="flex items-center gap-3 text-fg">
-                <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-glow" />
-                {f}
-              </li>
+        <Block n="07" title="Engineering considerations">
+          <div className="space-y-5">
+            {project.considerations.map((c) => (
+              <p key={c}>{c}</p>
             ))}
-          </ul>
-        </Block>
-        <Block n="07" title="Engineering decisions">
-          <dl className="space-y-8">
+          </div>
+          <dl className="mt-10 space-y-8">
             {project.decisions.map((d) => (
               <div key={d.title}>
                 <dt className="text-lg text-fg">{d.title}</dt>
@@ -111,8 +141,14 @@ export default async function ProjectPage({ params }: Props) {
             ))}
           </dl>
         </Block>
+        <Block n="08" title="Expected business value">
+          <p className="mb-6 text-sm text-fg-3">Potential value of this approach, not measured results.</p>
+          <Bullets items={project.outcomes} />
+        </Block>
 
-        <div className="mt-24 flex flex-col justify-between gap-4 border-t border-line pt-10 sm:flex-row sm:items-center">
+        <ConfidentialityNotice className="mt-24" />
+
+        <div className="mt-16 flex flex-col justify-between gap-4 border-t border-line pt-10 sm:flex-row sm:items-center">
           <p className="text-fg-3">Next project</p>
           <ArrowLink href={`/work/${next.slug}/`} className="font-display text-3xl">
             {next.title}
@@ -120,7 +156,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </div>
 
-      <CtaBand />
+      <CtaBand title="Planning something similar?" text="Let’s discuss how this kind of engineering could apply to your product." cta="Discuss a Similar Project" />
     </>
   );
 }
@@ -136,5 +172,18 @@ function Block({ n, title, children }: { n: string; title: string; children: Rea
         <div className="text-lg text-fg-2 lg:col-span-8">{children}</div>
       </section>
     </Reveal>
+  );
+}
+
+function Bullets({ items }: { items: string[] }) {
+  return (
+    <ul className="grid gap-3 sm:grid-cols-2">
+      {items.map((it) => (
+        <li key={it} className="flex items-start gap-3 text-fg">
+          <span aria-hidden className="mt-2.5 size-1.5 shrink-0 rounded-full bg-glow" />
+          {it}
+        </li>
+      ))}
+    </ul>
   );
 }

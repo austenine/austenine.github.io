@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { site } from '@/lib/site';
 import { approach, principles } from '@/data/company';
+import { pillars } from '@/data/services';
+import { ArrowLink } from '@/components/shared/button';
 import { PageHero } from '@/components/shared/section-heading';
 import { Reveal } from '@/components/shared/reveal';
 import { LogoMark } from '@/components/layout/logo';
@@ -24,8 +26,9 @@ export default function CompanyPage() {
     <>
       <PageHero eyebrow="Company" title="Engineering with purpose. Building for progress." />
 
-      {/* Introduction */}
-      <section className="container-x grid gap-12 pb-24 lg:grid-cols-12">
+      {/* Who we are */}
+      <section aria-labelledby="who-we-are" className="container-x grid gap-12 pb-16 lg:grid-cols-12">
+        <h2 id="who-we-are" className="sr-only">Who we are</h2>
         <Reveal className="text-xl text-fg lg:col-span-7">
           <p>
             Austenine is an independent, founder-led software engineering venture focused on helping startups,
@@ -70,51 +73,8 @@ export default function CompanyPage() {
         </div>
       </section>
 
-      {/* Founder */}
-      <section aria-labelledby="founder" className="container-x grid gap-12 py-24 sm:py-32 lg:grid-cols-12">
-        <Reveal className="lg:col-span-4">
-          <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-xl border border-line" style={{ background: 'var(--gradient-wave-radial)' }}>
-            {/* TODO: replace with a real portrait (public/images/founder.jpg) */}
-            <LogoMark className="size-24 opacity-90" />
-          </div>
-        </Reveal>
-        <Reveal delay={0.1} className="lg:col-span-7 lg:col-start-6">
-          <p className="eyebrow">The founder</p>
-          <h2 id="founder" className="mt-5 text-4xl sm:text-5xl">
-            {site.founder.name}
-          </h2>
-          <p className="mt-2 text-fg-3">{site.founder.role}</p>
-          <div className="mt-8 space-y-5 text-lg text-fg-2">
-            {site.founder.bio.map((p) => (
-              <p key={p}>{p}</p>
-            ))}
-          </div>
-          {site.founder.linkedin ? (
-            <a href={site.founder.linkedin} target="_blank" rel="noopener noreferrer" className="mt-8 inline-block text-glow hover:underline">
-              LinkedIn ↗
-            </a>
-          ) : null}
-        </Reveal>
-      </section>
-
-      {/* Founder-led model */}
-      <section className="container-x pb-24 sm:pb-32">
-        <Reveal>
-          <p className="eyebrow">How we operate</p>
-          <h2 className="mt-5 max-w-3xl text-4xl sm:text-5xl">A founder-led model, by design.</h2>
-        </Reveal>
-        <div className="mt-14 grid gap-px overflow-hidden rounded-lg border border-line bg-line md:grid-cols-3">
-          {model.map((m, i) => (
-            <Reveal key={m.title} delay={i * 0.08} className="h-full bg-ink p-8">
-              <h3 className="text-xl">{m.title}</h3>
-              <p className="mt-3 text-fg-2">{m.body}</p>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
       {/* Philosophy & principles */}
-      <section className="container-x grid gap-16 border-t border-line py-24 sm:py-32 lg:grid-cols-12">
+      <section className="container-x grid gap-16 py-24 sm:py-32 lg:grid-cols-12">
         <Reveal className="lg:col-span-5">
           <p className="eyebrow">Engineering philosophy</p>
           <h2 className="mt-5 text-4xl sm:text-5xl">Software should be easy to trust and easy to change.</h2>
@@ -134,6 +94,52 @@ export default function CompanyPage() {
             </Reveal>
           ))}
         </dl>
+      </section>
+
+      {/* How we operate */}
+      <section className="container-x pb-24 sm:pb-32">
+        <Reveal>
+          <p className="eyebrow">How we operate</p>
+          <h2 className="mt-5 max-w-3xl text-4xl sm:text-5xl">A founder-led model, by design.</h2>
+        </Reveal>
+        <div className="mt-14 grid gap-px overflow-hidden rounded-lg border border-line bg-line md:grid-cols-3">
+          {model.map((m, i) => (
+            <Reveal key={m.title} delay={i * 0.08} className="h-full bg-ink p-8">
+              <h3 className="text-xl">{m.title}</h3>
+              <p className="mt-3 text-fg-2">{m.body}</p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Engineering capabilities */}
+      <section className="bg-ink-2 py-24 sm:py-32">
+        <div className="container-x">
+          <Reveal>
+            <p className="eyebrow">Engineering capabilities</p>
+            <h2 className="mt-5 max-w-3xl text-4xl sm:text-5xl">What we deliver.</h2>
+          </Reveal>
+          <div className="mt-14 grid gap-px overflow-hidden rounded-lg border border-line bg-line md:grid-cols-3">
+            {pillars.map((p, i) => (
+              <Reveal key={p.number} delay={i * 0.08} className="h-full bg-ink p-8">
+                <p className="font-display text-sm text-glow">{p.number}</p>
+                <h3 className="mt-3 text-xl">{p.title}</h3>
+                <p className="mt-3 text-fg-2">{p.description}</p>
+                <ul className="mt-6 space-y-2 text-sm text-fg-2">
+                  {p.services.map((sv) => (
+                    <li key={sv} className="flex items-center gap-3">
+                      <span aria-hidden className="size-1.5 rounded-full bg-glow" />
+                      {sv}
+                    </li>
+                  ))}
+                </ul>
+                <ArrowLink href={p.href} className="mt-8">
+                  Explore
+                </ArrowLink>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Process summary */}

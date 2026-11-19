@@ -29,7 +29,7 @@ export const site = {
     role: 'Founder & Engineer',
     bio: [
       '[Two or three sentences on your engineering background: the kinds of systems you have built, the stacks you work in, and how many years you have been doing it.]',
-      '[One sentence on why you started Skyrocket and the kind of work you want to take on.]',
+      '[One sentence on why you started Austenine and the kind of work you want to take on.]',
     ],
     linkedin: '', // TODO: personal LinkedIn URL. Hidden while empty.
   },

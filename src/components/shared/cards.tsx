@@ -25,6 +25,8 @@ export function ProjectCard({ project, large = false }: { project: Project; larg
         <div className="overflow-hidden rounded-lg">
           <ProjectVisual
             visual={project.visual}
+            image={project.image}
+            alt={`${project.title} interface mockup`}
             className={cn(
               'aspect-[16/10] transition duration-700 ease-out group-hover:scale-[1.02] group-hover:border-line-hover',
               large && 'lg:aspect-[16/11]',

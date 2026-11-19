@@ -26,26 +26,35 @@ export type Industry = {
 };
 
 /**
- * concept      — designed and documented by Austenine, not built for a client
- * independent  — built and shipped by Austenine as its own product
- * client       — real client work, published with the client's permission only
+ * concept       — illustrative project demonstrating a proposed solution; hypothetical scenario, no client
+ * independent   — product or prototype built under Austenine
+ * professional  — work performed in previous employment, published only where disclosure is permitted
  */
-export type ProjectKind = 'concept' | 'independent' | 'client';
+export type ProjectKind = 'concept' | 'independent' | 'professional';
 
 export type Project = {
   slug: string;
   title: string;
   kind: ProjectKind;
   category: string;
+  sector: string;
   summary: string;
-  overview: string;
-  problem: string;
-  solution: string;
+  /** The market context the project is written for. Hypothetical for concept projects. */
+  scenario: string;
+  overview: string[];
+  challenge: { points: string[]; closing?: string };
+  objective: string;
+  approach: { title: string; body?: string; points: string[]; ordered?: boolean }[];
   architecture: { name: string; detail: string }[];
   stack: string[];
-  features: string[];
+  considerations: string[];
   decisions: { title: string; body: string }[];
+  /** Potential value only. Never measured results unless they can be evidenced. */
+  outcomes: string[];
+  status: string;
   visual: 'billing' | 'booking' | 'analytics' | 'assistant';
+  /** Screenshot of the static mockup in /public. Falls back to the SVG visual when absent. */
+  image?: string;
 };
 
 export type Insight = {

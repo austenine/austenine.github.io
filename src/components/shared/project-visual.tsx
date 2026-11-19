@@ -6,7 +6,32 @@ import { cn } from '@/lib/utils';
  * projects, and these deliberately show interface shapes rather than numbers.
  * Swap for real screenshots (in public/images/) when a project is built.
  */
-export function ProjectVisual({ visual, className }: { visual: Project['visual']; className?: string }) {
+export function ProjectVisual({
+  visual,
+  image,
+  alt = 'Illustrative interface mockup',
+  className,
+}: {
+  visual: Project['visual'];
+  image?: string;
+  alt?: string;
+  className?: string;
+}) {
+  if (image) {
+    return (
+      <div className={cn('relative overflow-hidden rounded-lg border border-line bg-ink-2', className)}>
+        {/* Static export: next/image adds nothing here and does not prefix basePath. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}${image}`}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-left-top"
+        />
+      </div>
+    );
+  }
   return (
     <div
       className={cn('relative overflow-hidden rounded-lg border border-line', className)}
