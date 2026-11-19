@@ -10,15 +10,13 @@ import { services } from '@/data/services';
 import { site } from '@/lib/site';
 import { buttonClass } from '@/components/shared/button';
 import { cn } from '@/lib/utils';
-import GoogleContactForm from './google-contact-form';
 
 /**
  * Web3Forms emails each submission to the address registered with the key — no
  * backend, which suits the static export. Without NEXT_PUBLIC_WEB3FORMS_KEY the
  * form says so and points to email instead of pretending to send.
  */
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? '';
-const ENDPOINT = 'https://api.web3forms.com/submit';
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyKHhcDCXJHICzSozSwtJ6aAuzZ-Hae1bvG0bQJdoO0ZBO1lg4CuHEc0p1tqyfyNxWt/exec';
 const MIN_FILL_MS = 3000; // humans take longer than this; most bots don't
 
 const serviceOptions = [...services.map((s) => ({ value: s.id, label: s.title })), { value: 'other', label: 'Something else' }];
@@ -63,29 +61,28 @@ export function ContactForm() {
       setStatus({ state: 'sent' });
       return;
     }
-    if (!ACCESS_KEY) {
+    if (!ENDPOINT) {
       setStatus({ state: 'error', message: `The form isn’t connected yet. Please email us at ${site.email}.` });
       return;
     }
     try {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
+        mode: "no-cors",
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          access_key: ACCESS_KEY,
-          subject: `New enquiry from ${values.name} — ${site.name} website`,
-          from_name: `${site.name} website`,
           name: values.name,
           email: values.email,
           company: values.company || '—',
           service: serviceOptions.find((o) => o.value === values.service)?.label,
           message: values.description,
-          budget: values.budget || '—',
-          timeline: values.timeline || '—',
         }),
       });
       const result = await res.json().catch(() => ({}));
-      if (!res.ok || result.success === false) throw new Error(result.message || 'Submission failed.');
+
+      console.log(result)
+
+      if (result.success === false) throw new Error(result.message || 'Submission failed.');
       reset();
       setStatus({ state: 'sent' });
     } catch {
@@ -125,7 +122,7 @@ export function ContactForm() {
       {/* Honeypot: hidden from people and assistive tech; bots tick it. */}
       <input type="checkbox" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" {...register('botcheck')} />
 
-      {/* <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Full name" error={errors.name?.message}>
           {(p) => <input {...p} {...register('name')} autoComplete="name" className={inputClass} />}
         </Field>
@@ -160,29 +157,8 @@ export function ContactForm() {
             />
           )}
         </Field>
-        <Field label="Estimated budget" optional>
-          {(p) => (
-            <select {...p} {...register('budget')} defaultValue="" className={inputClass}>
-              <option value="">Prefer not to say</option>
-              {budgets.map((b) => (
-                <option key={b}>{b}</option>
-              ))}
-            </select>
-          )}
-        </Field>
-        <Field label="Expected timeline" optional>
-          {(p) => (
-            <select {...p} {...register('timeline')} defaultValue="" className={inputClass}>
-              <option value="">Not decided</option>
-              {timelines.map((t) => (
-                <option key={t}>{t}</option>
-              ))}
-            </select>
-          )}
-        </Field>
-      </div> */}
+      </div> 
 
-      <GoogleContactForm formUrl='https://google.com' />
 
       {status.state === 'error' ? (
         <p role="alert" className="mt-8 flex gap-3 rounded-lg border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-200">
@@ -198,10 +174,10 @@ export function ContactForm() {
             Privacy
           </Link>
         </p>
-        {/* <button type="submit" disabled={isSubmitting} className={buttonClass('primary', 'w-full sm:w-auto')}>
+        <button type="submit" disabled={isSubmitting} className={buttonClass('primary', 'w-full sm:w-auto')}>
           {isSubmitting ? <Loader2 aria-hidden className="size-4 animate-spin" /> : null}
           {isSubmitting ? 'Sending…' : 'Send enquiry'}
-        </button> */}
+        </button>
       </div>
     </form>
   );
