@@ -1,0 +1,190 @@
+@import 'tailwindcss';
+
+/*
+ * Brand tokens — source of truth (from the brand brief). Change values here;
+ * the @theme block below only maps them to Tailwind utility names.
+ */
+:root {
+  /* Base & Surface Colors */
+  --color-bg-primary: #0b0f15;
+  --color-surface-elevated: #1e2229;
+  --color-shadow-deep: #0d1b36;
+
+  /* Brand & Accent Colors */
+  --color-accent-primary: #1e51ff;
+  --color-accent-glow: #4b9fff;
+
+  /* Typography */
+  --color-text-primary: #ffffff;
+
+  /* Gradient Stops */
+  --gradient-stop-1: #090e1a;
+  --gradient-stop-2: #10257a;
+  --gradient-stop-3: #1e51ff;
+  --gradient-stop-4: #5ca8ff;
+  --gradient-stop-5: #d6eaff;
+
+  /* Theme Gradients */
+  --gradient-wave-linear: linear-gradient(
+    135deg,
+    var(--gradient-stop-1) 0%,
+    var(--gradient-stop-2) 25%,
+    var(--gradient-stop-3) 55%,
+    var(--gradient-stop-4) 80%,
+    var(--gradient-stop-5) 100%
+  );
+  --gradient-wave-radial: radial-gradient(
+    circle at 70% 30%,
+    var(--gradient-stop-5) 0%,
+    var(--gradient-stop-4) 20%,
+    var(--gradient-stop-3) 45%,
+    var(--gradient-stop-1) 85%
+  );
+
+  /* Additional UI Tokens */
+  --color-bg-secondary: #101722;
+  --color-surface: #151b25;
+  --color-accent-hover: #3767ff;
+  --color-accent-soft: rgba(30, 81, 255, 0.12);
+
+  --color-text-secondary: #a7b1c2;
+  --color-text-muted: #717d90;
+
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-hover: rgba(75, 159, 255, 0.45);
+
+  --gradient-brand: linear-gradient(135deg, #090e1a 0%, #10257a 25%, #1e51ff 55%, #5ca8ff 80%, #d6eaff 100%);
+  --gradient-glow: radial-gradient(circle at 70% 30%, rgba(75, 159, 255, 0.25), transparent 65%);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 32px;
+
+  /* Shadows */
+  --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 40px rgba(30, 81, 255, 0.18);
+
+  /* Motion */
+  --transition-base: 250ms ease;
+}
+
+/* Tailwind names for the tokens above: bg-ink, text-fg-2, border-line, rounded-lg … */
+@theme inline {
+  --color-ink: var(--color-bg-primary);
+  --color-ink-2: var(--color-bg-secondary);
+  --color-surface: var(--color-surface);
+  --color-elevated: var(--color-surface-elevated);
+  --color-deep: var(--color-shadow-deep);
+
+  --color-accent: var(--color-accent-primary);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-soft: var(--color-accent-soft);
+  /* Use glow, not accent, for accent-coloured TEXT: #1E51FF fails contrast on the dark page. */
+  --color-glow: var(--color-accent-glow);
+
+  --color-fg: var(--color-text-primary);
+  --color-fg-2: var(--color-text-secondary);
+  --color-fg-3: var(--color-text-muted);
+
+  --color-line: var(--color-border);
+  --color-line-hover: var(--color-border-hover);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-glow: var(--shadow-glow);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Google Sans Flex', var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  h1, h2, h3, h4 {
+    color: var(--color-text-primary);
+    font-family: var(--font-display);
+    font-weight: 450;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  :focus-visible {
+    outline: 2px solid var(--color-accent-glow);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: var(--color-accent-primary);
+    color: #fff;
+  }
+}
+
+@utility container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 84rem;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) { padding-inline: 2.5rem; }
+}
+
+/* Small uppercase label above headings. */
+@utility eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent-glow);
+}
+
+/* Faint engineering grid, faded at the edges. */
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+
+@utility text-gradient {
+  background: linear-gradient(100deg, #ffffff 10%, var(--gradient-stop-5) 40%, var(--gradient-stop-4) 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hero sculpture motion — slow, ambient, disabled for reduced motion below. */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.85; }
+  50% { transform: translate3d(-2%, 3%, 0) scale(1.06); opacity: 1; }
+}
+@utility animate-spin-slow { animation: spin-slow 90s linear infinite; }
+@utility animate-drift { animation: drift 14s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
